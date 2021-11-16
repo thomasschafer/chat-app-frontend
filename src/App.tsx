@@ -18,11 +18,11 @@ function App() {
 
   return (
     <div className="App">
-      <header className="text-center">
-        <div className="bg-blue-900 p-5">
+      <nav className="text-center">
+        <div className="bg-blue-900 h-16 w-full flex flex-col items-center justify-center">
           <h1 className="text-white">Welcome!</h1>
         </div>
-      </header>
+      </nav>
       <main>
         <div className="flex flex-col items-center p-2 text-center">
           <Link

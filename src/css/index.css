@@ -7,3 +7,7 @@
     @apply text-2xl;
   }
 }
+
+body {
+  overscroll-behavior-y: none;
+}
