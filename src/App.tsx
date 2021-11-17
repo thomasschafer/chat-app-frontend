@@ -17,47 +17,42 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <nav className="text-center">
-        <div className="bg-blue-900 h-16 w-full flex flex-col items-center justify-center">
-          <h1 className="text-white">Welcome!</h1>
+    <main className="w-screen h-screen flex justify-center align-middle bg-white">
+      <div className="flex flex-col sm:flex-row justify-center items-center align-middle p-2 text-center">
+        <Link
+          className="bg-gray-300 p-3 m-2 rounded-md w-60 h-16 flex items-center justify-center shadow hover:bg-indigo-200 hover:shadow-md font-bold tracking-wide"
+          to={`/chat/${uuidv4()}`}
+        >
+          New chat
+        </Link>
+        <div
+          className="cursor-pointer bg-gray-300 p-3 rounded-md m-2 w-60 h-16 flex items-center justify-center shadow hover:bg-indigo-200 hover:shadow-md font-bold tracking-wide"
+          onClick={() => {
+            !showExistingChatInput && setShowExistingChatInput(true);
+          }}
+        >
+          {showExistingChatInput ? (
+            <form className="flex flex-row items-center space-x-3">
+              <input
+                type="text"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Chat ID"
+                value={chatId}
+                onChange={updateChatId}
+              />
+              <input
+                type="submit"
+                className="py-2 px-3 cursor-pointer rounded-md"
+                value="Go"
+                onClick={handleSubmit}
+              />
+            </form>
+          ) : (
+            <>Existing chat</>
+          )}
         </div>
-      </nav>
-      <main>
-        <div className="flex flex-col items-center p-2 text-center">
-          <Link
-            className="bg-gray-300 p-3 m-2 rounded-md h-full w-60 max-w-full"
-            to={`/chat/${uuidv4()}`}
-          >
-            New chat
-          </Link>
-          <div
-            className="cursor-pointer bg-gray-300 p-3 rounded-md min-w-min m-2 w-60 max-w-full"
-            onClick={() => {
-              setShowExistingChatInput(!showExistingChatInput);
-            }}
-          >
-            Existing chat
-          </div>
-          <form className={`flex flex-row ${showExistingChatInput ? "" : "invisible"}`}>
-            <label>Chat ID:</label>
-            <input
-              type="text"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="1234"
-              value={chatId}
-              onChange={updateChatId}
-            />
-            <input
-              type="submit"
-              className="py-2 px-3 cursor-pointer rounded-md mt-2"
-              value="Go"
-              onClick={handleSubmit}
-            />
-          </form>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
 

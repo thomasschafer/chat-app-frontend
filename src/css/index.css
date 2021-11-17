@@ -11,3 +11,9 @@
 body {
   overscroll-behavior-y: none;
 }
+
+@screen md {
+  .message-container {
+    max-width: calc(768px * 11 / 12);
+  }
+}

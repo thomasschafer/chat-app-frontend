@@ -12,7 +12,7 @@ interface chatMessage {
 
 const Message = ({ msg, senderId }: { msg: chatMessage; senderId: string }) => (
   <div
-    className={`w-11/12 sm:w-max max-w-full md:max-w-screen-md rounded-xl px-5 py-3 my-3 ${
+    className={`message-container max-w-max w-11/12 md:w-max rounded-xl px-5 py-3 my-3 ${
       msg.sender === senderId ? "ml-auto bg-blue-100 text-right" : "bg-gray-200"
     }`}
   >
@@ -36,15 +36,14 @@ const OpenChat = () => {
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
-      console.log("Client: connected", newSocket.connected);
+      newSocket.emit("chat-id", params.chatId);
     });
 
     newSocket.on("message received", (msg) => {
-      console.log("Message received", msg);
       setMessageThread((thread) => [...thread, msg]);
       window.scrollTo(0, document.body.scrollHeight);
     });
-  }, []);
+  }, [params]);
 
   const updateMessage = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
@@ -52,7 +51,7 @@ const OpenChat = () => {
 
   const submitMessage = () => {
     if (socket) {
-      socket.emit("new-message", { sender: senderId, body: message });
+      socket.emit("new-message", { sender: senderId, body: message, chatId: params.chatId });
       setMessage("");
     }
   };
@@ -71,7 +70,7 @@ const OpenChat = () => {
 
   return (
     <main className="flex flex-col items-center">
-      <nav className="fixed top-0 bg-blue-900 h-16 w-full flex flex-col items-center justify-center">
+      <nav className="fixed top-0 bg-indigo-700 h-16 w-full flex flex-col items-center justify-center">
         <div className="w-full max-w-screen-lg p-5 flex flex-row justify-between items-center">
           <Link to="/" className="text-white w-5">
             Home
