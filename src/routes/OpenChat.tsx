@@ -6,17 +6,17 @@ import { v4 as uuidv4 } from "uuid";
 const BACKEND_URL = "localhost:8000";
 
 interface chatMessage {
-  sender: string;
+  senderId: string;
   body: string;
 }
 
 const Message = ({ msg, senderId }: { msg: chatMessage; senderId: string }) => (
   <div
     className={`message-container max-w-max w-11/12 md:w-max rounded-xl px-5 py-3 my-3 ${
-      msg.sender === senderId ? "ml-auto bg-blue-100 text-right" : "bg-gray-200"
+      msg.senderId === senderId ? "ml-auto bg-blue-100 text-right" : "bg-gray-200"
     }`}
   >
-    <b>{msg.sender}</b>
+    <b>{msg.senderId}</b>
     <br />
     {msg.body}
   </div>
@@ -39,9 +39,13 @@ const OpenChat = () => {
       newSocket.emit("chat-id", params.chatId);
     });
 
-    newSocket.on("message received", (msg) => {
+    newSocket.on("message-received", (msg) => {
       setMessageThread((thread) => [...thread, msg]);
       window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    newSocket.on("message-thread", (msg) => {
+      console.log("message-thread", msg);
     });
   }, [params]);
 
@@ -51,7 +55,7 @@ const OpenChat = () => {
 
   const submitMessage = () => {
     if (socket) {
-      socket.emit("new-message", { sender: senderId, body: message, chatId: params.chatId });
+      socket.emit("new-message", { senderId: senderId, body: message, chatId: params.chatId });
       setMessage("");
     }
   };
