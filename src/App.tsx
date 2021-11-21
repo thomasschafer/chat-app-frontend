@@ -7,10 +7,6 @@ function App() {
   const [showExistingChatInput, setShowExistingChatInput] = useState(false);
   const navigate = useNavigate();
 
-  const updateChatId = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChatId(event.target.value);
-  };
-
   const handleSubmit = (event: React.MouseEvent) => {
     event.preventDefault();
     navigate(`/chat/${chatId}`);
@@ -38,7 +34,9 @@ function App() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 placeholder="Chat ID"
                 value={chatId}
-                onChange={updateChatId}
+                onChange={(e) => {
+                  setChatId(e.target.value);
+                }}
               />
               <input
                 type="submit"

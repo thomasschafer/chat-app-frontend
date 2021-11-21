@@ -10,6 +10,7 @@ const BACKEND_URL = "localhost:8000";
 interface chatMessage {
   senderId: string;
   body: string;
+  userName: string;
 }
 
 const Message = ({ msg, senderId }: { msg: chatMessage; senderId: string }) => (
@@ -18,7 +19,7 @@ const Message = ({ msg, senderId }: { msg: chatMessage; senderId: string }) => (
       msg.senderId === senderId ? "ml-auto bg-blue-100 text-right" : "bg-gray-200"
     }`}
   >
-    <b>{msg.senderId}</b>
+    <b>{msg.userName || msg.senderId}</b>
     <br />
     {msg.body}
   </div>
@@ -50,17 +51,112 @@ const MessageThread = ({
   </div>
 );
 
-const Navbar = ({ chatId }: { chatId: string }) => (
-  <nav className="fixed top-0 bg-indigo-700 h-16 w-full flex flex-col items-center justify-center">
-    <div className="w-full max-w-screen-lg p-5 flex flex-row justify-between items-center">
-      <Link to="/" className="text-white w-5">
-        Home
-      </Link>
-      <h1 className="text-white">{chatId}</h1>
-      <div className="w-5"></div>
+const SettingsModal = ({
+  chatId,
+  senderId,
+  setShowSettingsModal,
+  socket,
+}: {
+  chatId: string;
+  senderId: string;
+  setShowSettingsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  socket: Socket | undefined;
+}) => {
+  const [userName, setUserName] = useState("");
+
+  const submitUserSettings = () => {
+    if (socket) {
+      socket.emit("update-user", { chatId: chatId, senderId: senderId, userName: userName });
+      setShowSettingsModal(false);
+    } else {
+      // TODO: ADD ERROR MESSAGE
+    }
+  };
+
+  return (
+    <div className="fixed w-5/6 h-5/6 max-w-xl max-h-xl m-auto inset-x-0 inset-y-0 bg-white shadow-md border-2 rounded z-10 p-5">
+      <div
+        className="max-w-min absolute right-5 cursor-pointer"
+        onClick={() => {
+          setShowSettingsModal(false);
+        }}
+      >
+        <svg
+          className="w-4 h-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z" />
+        </svg>
+      </div>
+      <form className="flex flex-col h-full">
+        <label>
+          Username:
+          <input
+            type="text"
+            className="shadow appearance-none border rounded w-full py-2 px-3 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            value={userName}
+            onChange={(e) => {
+              setUserName(e.target.value);
+            }}
+          />
+        </label>
+        <input
+          type="submit"
+          className="py-2 px-6 w-full mt-auto ml-auto max-w-min cursor-pointer rounded-md"
+          value="Save"
+          onClick={submitUserSettings}
+        />
+      </form>
     </div>
-  </nav>
-);
+  );
+};
+
+const Navbar = ({
+  chatId,
+  senderId,
+  socket,
+}: {
+  chatId: string;
+  senderId: string;
+  socket: Socket | undefined;
+}) => {
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+
+  return (
+    <>
+      <nav className="fixed top-0 bg-indigo-700 h-16 w-full flex flex-col items-center justify-center">
+        <div className="w-full max-w-screen-lg p-5 flex flex-row justify-between items-center">
+          <Link to="/" className="text-white">
+            Home
+          </Link>
+          <h1 className="text-white">{chatId}</h1>
+          <div
+            className="text-white cursor-pointer"
+            onClick={() => {
+              setShowSettingsModal(true);
+            }}
+          >
+            Settings
+          </div>
+        </div>
+      </nav>
+
+      {showSettingsModal ? (
+        <SettingsModal
+          chatId={chatId}
+          senderId={senderId}
+          setShowSettingsModal={setShowSettingsModal}
+          socket={socket}
+        />
+      ) : (
+        <></>
+      )}
+    </>
+  );
+};
 
 const ComposeMessageForm = ({
   message,
@@ -123,29 +219,55 @@ const OpenChat = () => {
   const [messageThread, setMessageThread] = useState<Array<chatMessage>>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [socket, setSocket] = useState<Socket>();
-  const [senderId] = useLocalStorage("chat-senderid", uuidv4());
-  const [userName, setUserName] = useLocalStorage("chat-username", senderId);
+  const [senderId, setSenderId] = useLocalStorage("chat-senderid", ""); // TODO: CREATE LOGIN TO USE INSTEAD OF LOCAL STORAGE
 
   useEffect(() => {
     const newSocket = io(BACKEND_URL);
     setSocket(newSocket);
+  }, []);
 
-    newSocket.on("connect", () => {
-      newSocket.emit("chat-id", params.chatId);
+  useEffect(() => {
+    if (!senderId) {
+      setSenderId(uuidv4());
+    }
+  }, [senderId, setSenderId]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("connect", () => {
+      socket.emit("chat-id", params.chatId);
     });
+  }, [params, socket]);
 
-    newSocket.on("message-received", (msg) => {
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("message-received", (msg) => {
       setMessageThread((thread) => [...thread, msg]);
       window.scrollTo(0, document.body.scrollHeight);
     });
 
-    newSocket.on("message-thread", (msg) => {
+    socket.on("message-thread", (msg) => {
       if (msg) {
         setMessageThread(msg);
       }
       setHasLoaded(true);
     });
-  }, [params]);
+
+    socket.on("user-was-updated", (body) => {
+      console.log("user-was-updated");
+      console.log(body);
+      setMessageThread((oldMessageThread) => {
+        if (!oldMessageThread) return oldMessageThread;
+        return oldMessageThread.map((message) => ({
+          ...message,
+          userName:
+            message.senderId === body.senderId && body.userName ? body.userName : message.userName,
+        }));
+      });
+    });
+  }, [setMessageThread, socket]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -155,7 +277,7 @@ const OpenChat = () => {
 
   return (
     <main className="flex flex-col items-center min-h-screen">
-      <Navbar chatId={params.chatId || ""} />
+      <Navbar chatId={params.chatId || ""} senderId={senderId} socket={socket} />
       {params.chatId && params.chatId.length <= 5 ? (
         <div className="pt-20">Sorry, that chat doesn't exist.</div>
       ) : (
@@ -174,7 +296,7 @@ const OpenChat = () => {
           />
         </>
       )}
-      <div className="pb-36">User id: {userName}</div>
+      <div className="pb-36">User id: {senderId}</div>
     </main>
   );
 };
