@@ -62,7 +62,17 @@ const SettingsModal = ({
   setShowSettingsModal: React.Dispatch<React.SetStateAction<boolean>>;
   socket: Socket | undefined;
 }) => {
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState("ldksmf");
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.emit("request-username", { userId: senderId });
+    socket.on("username", (body) => {
+      if (body.userName) {
+        setUserName(body.userName);
+      }
+    });
+  }, [senderId, socket]);
 
   const submitUserSettings = () => {
     if (socket) {
