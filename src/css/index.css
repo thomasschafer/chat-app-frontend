@@ -17,3 +17,7 @@ body {
     max-width: calc(768px * 11 / 12);
   }
 }
+
+.h-fit-content {
+  height: fit-content;
+}
