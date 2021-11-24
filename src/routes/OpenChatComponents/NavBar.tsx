@@ -6,11 +6,11 @@ import { SettingsModal } from "./SettingsModal";
 
 export const NavBar = ({
   chatId,
-  senderId,
+  senderUserId,
   socket,
 }: {
   chatId: string;
-  senderId: string;
+  senderUserId: string;
   socket: Socket | undefined;
 }) => {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -37,7 +37,7 @@ export const NavBar = ({
       {showSettingsModal ? (
         <SettingsModal
           chatId={chatId}
-          senderId={senderId}
+          senderUserId={senderUserId}
           setShowSettingsModal={setShowSettingsModal}
           socket={socket}
         />

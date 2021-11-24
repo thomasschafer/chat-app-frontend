@@ -16,7 +16,7 @@ const OpenChat = () => {
   const [messageThread, setMessageThread] = useState<Array<chatMessage>>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [socket, setSocket] = useState<Socket>();
-  const [senderId, setSenderId] = useLocalStorage("chat-senderid", ""); // TODO: CREATE LOGIN TO USE INSTEAD OF LOCAL STORAGE
+  const [senderUserId, setSenderUserId] = useLocalStorage("chat-sender-userid", ""); // TODO: CREATE LOGIN TO USE INSTEAD OF LOCAL STORAGE
 
   useEffect(() => {
     const newSocket = io(BACKEND_URL);
@@ -24,10 +24,10 @@ const OpenChat = () => {
   }, []);
 
   useEffect(() => {
-    if (!senderId) {
-      setSenderId(uuidv4());
+    if (!senderUserId) {
+      setSenderUserId(uuidv4());
     }
-  }, [senderId, setSenderId]);
+  }, [senderUserId, setSenderUserId]);
 
   useEffect(() => {
     if (!socket) return;
@@ -60,7 +60,9 @@ const OpenChat = () => {
         return oldMessageThread.map((message) => ({
           ...message,
           userName:
-            message.senderId === body.senderId && body.userName ? body.userName : message.userName,
+            message.senderUserId === body.senderUserId && body.userName
+              ? body.userName
+              : message.userName,
         }));
       });
     });
@@ -74,13 +76,13 @@ const OpenChat = () => {
 
   return (
     <main className="flex flex-col items-center min-h-screen">
-      <NavBar chatId={params.chatId || ""} senderId={senderId} socket={socket} />
+      <NavBar chatId={params.chatId || ""} senderUserId={senderUserId} socket={socket} />
       {params.chatId && params.chatId.length <= 5 ? (
         <div className="pt-20">Sorry, that chat doesn't exist.</div>
       ) : (
         <>
           {hasLoaded ? (
-            <MessageThread messageThread={messageThread} senderId={senderId} />
+            <MessageThread messageThread={messageThread} senderUserId={senderUserId} />
           ) : (
             <div className="w-full h-screen flex justify-center items-center">Loading...</div>
           )}
@@ -88,7 +90,7 @@ const OpenChat = () => {
           <ComposeMessageForm
             message={message}
             setMessage={setMessage}
-            senderId={senderId}
+            senderUserId={senderUserId}
             socket={socket}
           />
         </>

@@ -3,30 +3,34 @@ import { Socket } from "socket.io-client";
 
 export const SettingsModal = ({
   chatId,
-  senderId,
+  senderUserId,
   setShowSettingsModal,
   socket,
 }: {
   chatId: string;
-  senderId: string;
+  senderUserId: string;
   setShowSettingsModal: React.Dispatch<React.SetStateAction<boolean>>;
   socket: Socket | undefined;
 }) => {
-  const [userName, setUserName] = useState("ldksmf");
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     if (!socket) return;
-    socket.emit("request-username", { userId: senderId });
+    socket.emit("request-username", { userId: senderUserId });
     socket.on("username", (body) => {
       if (body.userName) {
         setUserName(body.userName);
       }
     });
-  }, [senderId, socket]);
+  }, [senderUserId, socket]);
 
   const submitUserSettings = () => {
     if (socket) {
-      socket.emit("update-user", { chatId: chatId, senderId: senderId, userName: userName });
+      socket.emit("update-user", {
+        chatId: chatId,
+        senderUserId: senderUserId,
+        userName: userName,
+      });
       setShowSettingsModal(false);
     } else {
       // TODO: ADD ERROR MESSAGE

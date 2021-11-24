@@ -1,16 +1,16 @@
 export interface chatMessage {
-  senderId: string;
+  senderUserId: string;
   body: string;
   userName: string;
 }
 
-const Message = ({ msg, senderId }: { msg: chatMessage; senderId: string }) => (
+const Message = ({ msg, senderUserId }: { msg: chatMessage; senderUserId: string }) => (
   <div
     className={`message-container max-w-max w-11/12 md:w-max rounded-xl px-5 py-3 my-3 ${
-      msg.senderId === senderId ? "ml-auto bg-blue-100 text-right" : "bg-gray-200"
+      msg.senderUserId === senderUserId ? "ml-auto bg-blue-100 text-right" : "bg-gray-200"
     }`}
   >
-    <b>{msg.userName || msg.senderId}</b>
+    <b>{msg.userName || msg.senderUserId}</b>
     <br />
     {msg.body}
   </div>
@@ -18,10 +18,10 @@ const Message = ({ msg, senderId }: { msg: chatMessage; senderId: string }) => (
 
 export const MessageThread = ({
   messageThread,
-  senderId,
+  senderUserId,
 }: {
   messageThread: Array<chatMessage>;
-  senderId: string;
+  senderUserId: string;
 }) => (
   <div className="w-full max-w-screen-lg p-5 pt-20 border-bottom mb-24">
     {messageThread.length === 0 ? (
@@ -37,7 +37,7 @@ export const MessageThread = ({
       <></>
     )}
     {messageThread.map((msg, idx) => (
-      <Message senderId={senderId} msg={msg} key={`${idx}-${msg.body}`} />
+      <Message senderUserId={senderUserId} msg={msg} key={`${idx}-${msg.body}`} />
     ))}
   </div>
 );

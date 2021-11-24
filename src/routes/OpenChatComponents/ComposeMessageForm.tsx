@@ -3,12 +3,12 @@ import { Socket } from "socket.io-client";
 export const ComposeMessageForm = ({
   message,
   setMessage,
-  senderId,
+  senderUserId,
   socket,
 }: {
   message: string;
   setMessage: any;
-  senderId: string;
+  senderUserId: string;
   socket: Socket | undefined;
 }) => {
   const updateMessage = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -17,7 +17,7 @@ export const ComposeMessageForm = ({
 
   const submitMessage = () => {
     if (socket && message) {
-      socket.emit("new-message", { senderId: senderId, body: message });
+      socket.emit("new-message", { senderUserId: senderUserId, body: message });
       setMessage("");
     }
   };
