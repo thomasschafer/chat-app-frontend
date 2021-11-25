@@ -1,37 +1,26 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Socket } from "socket.io-client";
 
-export const SettingsModal = ({
+export const ChatSettingsModal = ({
   chatId,
-  senderUserId,
-  setShowSettingsModal,
+  intialChatName,
+  setShowChatSettingsModal,
   socket,
 }: {
   chatId: string;
-  senderUserId: string;
-  setShowSettingsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  intialChatName: string;
+  setShowChatSettingsModal: React.Dispatch<React.SetStateAction<boolean>>;
   socket: Socket | undefined;
 }) => {
-  const [userName, setUserName] = useState("");
+  const [chatName, setChatName] = useState(intialChatName);
 
-  useEffect(() => {
-    if (!socket) return;
-    socket.emit("request-username", { userId: senderUserId });
-    socket.on("username", (body) => {
-      if (body.userName) {
-        setUserName(body.userName);
-      }
-    });
-  }, [senderUserId, socket]);
-
-  const submitUserSettings = () => {
-    if (socket) {
-      socket.emit("update-user", {
-        chatId: chatId,
-        senderUserId: senderUserId,
-        userName: userName,
+  const submitChatSettings = () => {
+    if (socket && chatName) {
+      socket.emit("update-chat", {
+        chatId,
+        chatName,
       });
-      setShowSettingsModal(false);
+      setShowChatSettingsModal(false);
     } else {
       // TODO: ADD ERROR MESSAGE
     }
@@ -42,7 +31,7 @@ export const SettingsModal = ({
       <div
         className="max-w-min absolute right-5 cursor-pointer"
         onClick={() => {
-          setShowSettingsModal(false);
+          setShowChatSettingsModal(false);
         }}
       >
         <svg
@@ -55,15 +44,21 @@ export const SettingsModal = ({
           <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z" />
         </svg>
       </div>
+      <div className="mb-2">
+        Chat id:
+        <div className="shadow appearance-none border rounded w-full py-2 px-3 mt-2 text-gray-600 leading-tight bg-gray-200 focus:outline-none focus:shadow-outline">
+          {chatId}
+        </div>
+      </div>
       <form className="flex flex-col h-full">
         <label>
-          Username:
+          Chat name:
           <input
             type="text"
             className="shadow appearance-none border rounded w-full py-2 px-3 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={userName}
+            value={chatName}
             onChange={(e) => {
-              setUserName(e.target.value);
+              setChatName(e.target.value);
             }}
           />
         </label>
@@ -71,7 +66,7 @@ export const SettingsModal = ({
           type="submit"
           className="py-2 px-6 w-full mt-4 ml-auto max-w-min cursor-pointer rounded-md bg-gray-200 shadow border border-gray-300"
           value="Save"
-          onClick={submitUserSettings}
+          onClick={submitChatSettings}
         />
       </form>
     </div>

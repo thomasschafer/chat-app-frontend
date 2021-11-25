@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Socket } from "socket.io-client";
 
-import { SettingsModal } from "./SettingsModal";
+import { UserSettingsModal } from "./UserSettingsModal";
+import { ChatSettingsModal } from "./ChatSettingsModal";
 
 export const NavBar = ({
   chatId,
@@ -13,7 +14,21 @@ export const NavBar = ({
   senderUserId: string;
   socket: Socket | undefined;
 }) => {
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [chatName, setChatName] = useState("");
+  const [loaded, setLoaded] = useState(false);
+  const [showUserSettingsModal, setShowUserSettingsModal] = useState(false);
+  const [showChatSettingsModal, setShowChatSettingsModal] = useState(false);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("chat-name", (body) => {
+      if (body.chatName) {
+        setChatName(body.chatName);
+      }
+      setLoaded(true);
+    });
+  }, [socket, setChatName]);
 
   return (
     <>
@@ -22,11 +37,20 @@ export const NavBar = ({
           <Link to="/" className="text-white">
             Home
           </Link>
-          <h1 className="text-white">{chatId}</h1>
+          <h1
+            className="text-white cursor-pointer"
+            onClick={() => {
+              setShowUserSettingsModal(false);
+              setShowChatSettingsModal(true);
+            }}
+          >
+            {chatName || (loaded && chatId)}
+          </h1>
           <div
             className="text-white cursor-pointer"
             onClick={() => {
-              setShowSettingsModal(true);
+              setShowUserSettingsModal(true);
+              setShowChatSettingsModal(false);
             }}
           >
             Settings
@@ -34,15 +58,22 @@ export const NavBar = ({
         </div>
       </nav>
 
-      {showSettingsModal ? (
-        <SettingsModal
+      {showUserSettingsModal && (
+        <UserSettingsModal
           chatId={chatId}
           senderUserId={senderUserId}
-          setShowSettingsModal={setShowSettingsModal}
+          setShowUserSettingsModal={setShowUserSettingsModal}
           socket={socket}
         />
-      ) : (
-        <></>
+      )}
+
+      {showChatSettingsModal && (
+        <ChatSettingsModal
+          chatId={chatId}
+          intialChatName={chatName}
+          setShowChatSettingsModal={setShowChatSettingsModal}
+          socket={socket}
+        />
       )}
     </>
   );

@@ -6,7 +6,7 @@ export interface chatMessage {
 
 const Message = ({ msg, senderUserId }: { msg: chatMessage; senderUserId: string }) => (
   <div
-    className={`message-container max-w-max w-11/12 md:w-max rounded-xl px-5 py-3 my-3 ${
+    className={`message-container max-w-max w-11/12 md:w-max rounded-xl px-5 py-3 my-3 break-words ${
       msg.senderUserId === senderUserId ? "ml-auto bg-blue-100 text-right" : "bg-gray-200"
     }`}
   >

@@ -33,7 +33,7 @@ const OpenChat = () => {
     if (!socket) return;
 
     socket.on("connect", () => {
-      socket.emit("chat-id", params.chatId);
+      socket.emit("join-chat", params.chatId);
     });
   }, [params, socket]);
 
@@ -53,8 +53,6 @@ const OpenChat = () => {
     });
 
     socket.on("user-was-updated", (body) => {
-      console.log("user-was-updated");
-      console.log(body);
       setMessageThread((oldMessageThread) => {
         if (!oldMessageThread) return oldMessageThread;
         return oldMessageThread.map((message) => ({
