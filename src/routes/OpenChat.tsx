@@ -7,8 +7,7 @@ import { ComposeMessageForm } from "./OpenChatComponents/ComposeMessageForm";
 import { chatMessage, MessageThread } from "./OpenChatComponents/MessageThread";
 import { NavBar } from "./OpenChatComponents/NavBar";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-
-const BACKEND_URL = "localhost:8000";
+import { BACKEND_URL } from "../constants";
 
 const OpenChat = () => {
   let params = useParams();
