@@ -18,6 +18,9 @@ const OpenChat = () => {
   const [senderUserId, setSenderUserId] = useLocalStorage("chat-sender-userid", ""); // TODO: CREATE LOGIN TO USE INSTEAD OF LOCAL STORAGE
 
   useEffect(() => {
+    if (!BACKEND_URL) {
+      throw new Error("BACKEND_URL is not defined as an environment variable.");
+    }
     const newSocket = io(BACKEND_URL);
     setSocket(newSocket);
   }, []);
