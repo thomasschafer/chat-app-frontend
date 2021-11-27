@@ -28,13 +28,13 @@ function App() {
           alt="kobble text"
         />
         <Link
-          className="border-4 border-primaryPurple text-primaryPurple rounded-xl p-3 m-2 w-40 sm:w-60 h-16 flex items-center justify-center hover:bg-primaryPurple hover:text-white transition duration-75 font-bold tracking-wide"
+          className="border-4 border-primaryPurple text-primaryPurple rounded-xl p-3 m-2 w-60 h-16 flex items-center justify-center hover:bg-primaryPurple hover:text-white transition duration-75 font-bold tracking-wide"
           to={`/chat/${uuidv4()}`}
         >
           New chat
         </Link>
         <div
-          className={`border-4 border-primaryPurple text-primaryPurple rounded-xl m-2 w-40 sm:w-60 h-16 flex items-center justify-center hover:bg-primaryPurple hover:text-white transition duration-75 font-bold tracking-wide ${
+          className={`border-4 border-primaryPurple text-primaryPurple rounded-xl m-2 w-60 h-16 flex items-center justify-center hover:bg-primaryPurple hover:text-white transition duration-75 font-bold tracking-wide ${
             showExistingChatInput ? "bg-primaryPurple" : "cursor-pointer"
           }`}
           onClick={() => {
