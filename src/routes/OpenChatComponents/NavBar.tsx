@@ -4,6 +4,8 @@ import { Socket } from "socket.io-client";
 
 import { UserSettingsModal } from "./UserSettingsModal";
 import { ChatSettingsModal } from "./ChatSettingsModal";
+import settingsGear from "../../static/settings-gear.svg";
+import back from "../../static/back.svg";
 
 export const NavBar = ({
   chatId,
@@ -32,13 +34,17 @@ export const NavBar = ({
 
   return (
     <>
-      <nav className="fixed top-0 bg-indigo-700 h-16 w-full flex flex-col items-center justify-center">
+      <nav className="fixed top-0 bg-primaryPurple h-16 w-full flex flex-col items-center justify-center">
         <div className="w-full max-w-screen-lg p-5 flex flex-row justify-between items-center">
-          <Link to="/" className="text-white">
-            Home
+          <Link to="/" className="text-white transform hover:scale-105 transition-all">
+            <img
+              src={back}
+              alt="Back"
+              className="h-9 w-9 transform hover:scale-110 transition-all"
+            />
           </Link>
           <h1
-            className="text-white cursor-pointer"
+            className="text-white cursor-pointer transform hover:scale-105 transition-all"
             onClick={() => {
               setShowUserSettingsModal(false);
               setShowChatSettingsModal(true);
@@ -53,7 +59,11 @@ export const NavBar = ({
               setShowChatSettingsModal(false);
             }}
           >
-            Settings
+            <img
+              src={settingsGear}
+              alt="Settings"
+              className="h-8 w-8 transform hover:scale-110 transition-all"
+            />
           </div>
         </div>
       </nav>

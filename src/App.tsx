@@ -13,16 +13,28 @@ function App() {
   };
 
   return (
-    <main className="w-screen h-screen flex justify-center align-middle bg-white">
-      <div className="flex flex-col sm:flex-row justify-center items-center align-middle p-2 text-center">
+    <main className="w-screen h-screen flex justify-center align-middle bg-primaryPurple">
+      <div className="flex flex-col justify-center items-center align-middle py-10 sm:px-10 text-center h-full w-full sm-h-fit-content sm:w-8/12 sm:max-w-screen-sm my-auto rounded-xl bg-white">
+        <div className="flex-shrink-0">
+          <img
+            className="h-40 w-40 mb-5 object-cover"
+            src={process.env.PUBLIC_URL + "/kobble-logo.png"}
+            alt="kobble logo"
+          />
+        </div>
+        <img
+          className="w-40 mb-10"
+          src={process.env.PUBLIC_URL + "/kobble-text.png"}
+          alt="kobble text"
+        />
         <Link
-          className="bg-gray-300 p-3 m-2 rounded-md w-60 h-16 flex items-center justify-center shadow hover:bg-indigo-200 hover:shadow-md font-bold tracking-wide"
+          className="border-4 border-primaryPurple text-primaryPurple rounded-xl p-3 m-2 w-60 h-16 flex items-center justify-center hover:bg-primaryPurple hover:text-white transition duration-75 font-bold tracking-wide"
           to={`/chat/${uuidv4()}`}
         >
           New chat
         </Link>
         <div
-          className="cursor-pointer bg-gray-300 p-3 rounded-md m-2 w-60 h-16 flex items-center justify-center shadow hover:bg-indigo-200 hover:shadow-md font-bold tracking-wide"
+          className="border-4 border-primaryPurple text-primaryPurple rounded-xl cursor-pointer p-3 m-2 w-60 h-16 flex items-center justify-center hover:bg-primaryPurple hover:text-white transition duration-75 font-bold tracking-wide"
           onClick={() => {
             !showExistingChatInput && setShowExistingChatInput(true);
           }}

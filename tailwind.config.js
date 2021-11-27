@@ -6,10 +6,10 @@ module.exports = {
       width: {
         "w-fit-content": "fit-content",
       },
+      colors: {
+        primaryPurple: "#7838AA",
+        primaryPurpleDark: "#421564",
+      },
     },
   },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
 };

@@ -21,3 +21,9 @@ body {
 .h-fit-content {
   height: fit-content;
 }
+
+@screen sm {
+  .sm-h-fit-content {
+    height: fit-content;
+  }
+}
