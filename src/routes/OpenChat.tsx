@@ -21,12 +21,7 @@ const OpenChat = () => {
     if (!BACKEND_URL) {
       throw new Error("BACKEND_URL is not defined as an environment variable.");
     }
-    const newSocket = io(BACKEND_URL, {
-      withCredentials: true,
-      extraHeaders: {
-        "kobble-header": "true",
-      },
-    });
+    const newSocket = io(BACKEND_URL);
     setSocket(newSocket);
   }, []);
 
