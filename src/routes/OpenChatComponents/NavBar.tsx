@@ -50,7 +50,7 @@ export const NavBar = ({
               setShowChatSettingsModal(true);
             }}
           >
-            {chatName || (loaded && chatId)}
+            {chatName || (loaded && "Chat")}
           </h1>
           <div
             className="text-white cursor-pointer"
