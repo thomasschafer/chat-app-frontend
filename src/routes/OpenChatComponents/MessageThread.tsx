@@ -10,7 +10,7 @@ const Message = ({ msg, senderUserId }: { msg: chatMessage; senderUserId: string
       msg.senderUserId === senderUserId ? "ml-auto bg-indigo-100 text-right" : "bg-gray-200"
     }`}
   >
-    <b>{msg.userName || msg.senderUserId}</b>
+    <b>{msg.userName || <i className="text-gray-700">Anonymous</i>}</b>
     <br />
     {msg.body}
   </div>
