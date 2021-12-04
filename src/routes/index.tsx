@@ -71,13 +71,84 @@ const AppLogoAndText = () => (
   </>
 );
 
-const App = () => (
-  <main className="w-screen h-screen flex justify-center align-middle bg-primaryPurple">
-    <div className="flex flex-col justify-center items-center align-middle py-10 sm:px-10 text-center w-11/12 h-fit-content max-w-screen-sm my-auto rounded-xl bg-white">
-      <AppLogoAndText />
-      <ChatTypeSelection />
-    </div>
-  </main>
-);
+const LoginForm = ({
+  setLoggedIn,
+  setShowLoginForm,
+}: {
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowLoginForm: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const logInHandler = (event: React.MouseEvent) => {
+    console.log("login");
+    event.preventDefault();
+    // TODO: IMPLEMENT LOGIN
+    setLoggedIn(true);
+    setShowLoginForm(false);
+  };
+
+  const chatAnonymouselyHandler = (event: React.MouseEvent) => {
+    console.log("anon");
+    event.preventDefault();
+    setShowLoginForm(false);
+  };
+
+  return (
+    <form className="flex flex-col items-center h-full mx-5 md:w-max">
+      <input
+        type="text"
+        className="appearance-none rounded-lg border-2 border-primaryPurple w-full h-full py-2 px-3 text-gray-700 leading-tight mb-2 focus:outline-none focus:shadow-outline"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => {
+          setUsername(e.target.value);
+        }}
+      />
+      <input
+        type="password"
+        name="password"
+        className="appearance-none rounded-lg border-2 border-primaryPurple w-full h-full py-2 px-3 text-gray-700 leading-tight mb-2 focus:outline-none focus:shadow-outline"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => {
+          setPassword(e.target.value);
+        }}
+      />
+      <div className="flex flex-col sm:flex-row">
+        <input
+          type="submit"
+          className="py-2 px-8 mb-2 sm:mr-2 h-10 cursor-pointer text-center font-bold rounded-lg bg-primaryPurple hover:opacity-80 text-white hover:bg-grey"
+          value="Log in"
+          onClick={logInHandler}
+        />
+        <input
+          className="py-2 px-2 h-10 cursor-pointer text-center font-bold rounded-lg bg-primaryPurpleExtraLight text-primaryPurple hover:opacity-80"
+          value="Chat anonymously"
+          onClick={chatAnonymouselyHandler}
+        />
+      </div>
+    </form>
+  );
+};
+
+const App = () => {
+  const [showLoginForm, setShowLoginForm] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  return (
+    <main className="w-screen h-screen flex justify-center align-middle bg-primaryPurple">
+      <div className="flex flex-col justify-center items-center align-middle py-10 sm:px-10 text-center w-11/12 h-fit-content max-w-screen-sm my-auto rounded-xl bg-white">
+        <AppLogoAndText />
+        {showLoginForm ? (
+          <LoginForm setLoggedIn={setLoggedIn} setShowLoginForm={setShowLoginForm} />
+        ) : (
+          <ChatTypeSelection />
+        )}
+      </div>
+    </main>
+  );
+};
 
 export default App;
