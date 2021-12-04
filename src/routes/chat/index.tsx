@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import io, { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 
-import { BACKEND_URL } from "../constants";
-import { ComposeMessageForm } from "./OpenChatComponents/ComposeMessageForm";
-import { chatMessage, MessageThread } from "./OpenChatComponents/MessageThread";
-import { NavBar } from "./OpenChatComponents/NavBar";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { BACKEND_URL } from "../../constants/urls";
+import { ComposeMessageForm } from "./ComposeMessageForm";
+import { chatMessage, MessageThread } from "./MessageThread";
+import { NavBar } from "./NavBar";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 const OpenChat = () => {
   let params = useParams();

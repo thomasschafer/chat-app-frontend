@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./css/index.css";
-import App from "./App";
-import OpenChat from "./routes/OpenChat";
+import App from "./routes";
+import OpenChat from "./routes/chat";
 
 ReactDOM.render(
   <React.StrictMode>
