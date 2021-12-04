@@ -123,11 +123,12 @@ const LoginForm = ({
           value="Log in"
           onClick={logInHandler}
         />
-        <input
-          className="py-2 px-2 h-10 cursor-pointer text-center font-bold rounded-lg bg-primaryPurpleExtraLight text-primaryPurple hover:opacity-80"
-          value="Chat anonymously"
+        <button
+          className="py-2 px-6 h-10 cursor-pointer text-center font-bold rounded-lg bg-primaryPurpleExtraLight text-primaryPurple hover:opacity-80"
           onClick={chatAnonymouselyHandler}
-        />
+        >
+          Chat anonymously
+        </button>
       </div>
     </form>
   );
