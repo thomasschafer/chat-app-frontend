@@ -23,21 +23,23 @@ export const MessageThread = ({
   messageThread: Array<chatMessage>;
   senderUserId: string;
 }) => (
-  <div className="w-full max-w-screen-lg p-5 pt-20 border-bottom mb-24">
-    {messageThread.length === 0 ? (
-      <>
-        <img
-          className="w-8/12 max-w-sm mx-auto my-10"
-          src={process.env.PUBLIC_URL + "/message-ideas.svg"}
-          alt="Message ideas"
-        />
-        <div className="mx-auto my-10 w-max text-gray-500 text-2xl">Say hi!</div>
-      </>
-    ) : (
-      <></>
-    )}
-    {messageThread.map((msg, idx) => (
-      <Message senderUserId={senderUserId} msg={msg} key={`${idx}-${msg.body}`} />
-    ))}
+  <div className="w-full max-w-screen-lg min-h-screen	h-full flex px-5 pt-20 pb-28 border-bottom">
+    <div className="w-full self-end">
+      {messageThread.length === 0 ? (
+        <>
+          <img
+            className="w-8/12 max-w-sm mx-auto my-10"
+            src={process.env.PUBLIC_URL + "/message-ideas.svg"}
+            alt="Message ideas"
+          />
+          <div className="mx-auto my-10 w-max text-gray-500 text-2xl">Say hi!</div>
+        </>
+      ) : (
+        <></>
+      )}
+      {messageThread.map((msg, idx) => (
+        <Message senderUserId={senderUserId} msg={msg} key={`${idx}-${msg.body}`} />
+      ))}
+    </div>
   </div>
 );
