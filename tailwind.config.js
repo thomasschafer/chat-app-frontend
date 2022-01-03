@@ -7,6 +7,7 @@ module.exports = {
         "w-fit-content": "fit-content",
       },
       colors: {
+        primaryPurpleLight: "#9d63c9",
         primaryPurple: "#7838AA",
         primaryPurpleDark: "#421564",
       },
